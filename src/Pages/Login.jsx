@@ -8,11 +8,24 @@ export default function Login() {
   const [password, SetPassword] = useState();
 
   const navigate = useNavigate();
-  const signin = () => {
+  const  signin = async () => {
     console.log("email",email);
     console.log("password",password);
-
-    navigate("/welcomepage");
+    let result = await fetch("http://localhost:5000/login", {
+      method: "post",
+      body: JSON.stringify({ email, password }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    result = await result.json();
+    if (result.name) {
+      localStorage.setItem("user", JSON.stringify(result));
+      navigate("/welcomepage");
+    } else {
+      alert("Please Enter Correct Details");
+    }
+    
   };
   return (
     <>
